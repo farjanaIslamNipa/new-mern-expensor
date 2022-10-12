@@ -3,7 +3,8 @@ const PORT = 4000;
 import mongoose from 'mongoose';
 import cors from 'cors';
 import bodyParser from 'body-parser';
-import Transaction from './models/transaction.js';
+import TransactionsApi from './routes/TransactionsApi.js'
+
 
 
 const app = express();
@@ -17,20 +18,8 @@ app.get("/", (req, res) => {
   res.send("Hello world");
 });
 
-app.get('/transaction', async (req, res) => {
-  const transaction = await Transaction.find({}).sort({createdAt: -1})
-  res.json({data:transaction})
-})
-app.post("/transaction", async (req, res) => {
-  const {amount, description, date} = req.body;
-  const transaction = new Transaction({
-    amount,
-    description,
-    date,
-  });
-  await transaction.save();
-  res.json({message:"Success"});
-});
+app.use('/transaction', TransactionsApi)
+
 
 app.listen(PORT, ()=>{
   console.log('Server is running at http://localhost:4000');

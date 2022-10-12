@@ -12,6 +12,16 @@ import IconButton from '@mui/material/IconButton';
 
 
 export default function TransactionList({transactions}) {
+  const remove = async (_id) => {
+    if(!window.confirm('Are you sure')) return;
+    const res = await fetch(`http://localhos:4000/transaction/${_id}`, {
+      method:'DELETE',
+
+    });
+    if(res.ok){
+      window.alert('deleted')
+    }
+  }
   return (
       <>
         <Typography sx={{marginTop:5, backgroundColor: 'white', paddingTop: 3, paddingLeft:3}} variant="h6">List of Transactions</Typography>
@@ -27,7 +37,7 @@ export default function TransactionList({transactions}) {
           <TableBody>
             {transactions.map((transaction) => (
               <TableRow
-                key={transaction.id}
+                key={transaction._id}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell align='center' component="th" scope="row">
@@ -39,9 +49,9 @@ export default function TransactionList({transactions}) {
                 <IconButton aria-label="edit">
                   <EditTwoToneIcon color='primary' />
                 </IconButton>
-                <IconButton aria-label="delete">
-                  <DeleteSweepTwoToneIcon color='secondary' />
-                </IconButton>
+                  <IconButton aria-label="delete" onClick={() => remove(transaction._id)}>
+                    <DeleteSweepTwoToneIcon color='secondary' />
+                  </IconButton>
                 </TableCell>
               </TableRow>
             ))}

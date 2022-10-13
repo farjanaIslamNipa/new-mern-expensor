@@ -18,8 +18,10 @@ router.post('/', async (req, res) => {
   res.json({message:"Success"});
 });
 
-router.delete("/:_id", async(req, res) => {
-  console.log(req);
+router.delete("/:id", async(req, res) => {
+  await Transaction.findOneAndDelete({_id:req.params.id});
+  console.log(req.params.id);
+  res.json({message: 'success'})
 })
 
 export default router;

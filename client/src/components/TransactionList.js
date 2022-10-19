@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import EditTwoToneIcon from '@mui/icons-material/EditTwoTone';
 import DeleteSweepTwoToneIcon from '@mui/icons-material/DeleteSweepTwoTone';
 import IconButton from '@mui/material/IconButton';
+import dayjs from 'dayjs';
 
 
 export default function TransactionList({transactions}) {
@@ -19,8 +20,11 @@ export default function TransactionList({transactions}) {
 
     });
     if(res.ok){
-      window.alert('deleted')
+      window.alert('Deleted Successfully')
     }
+  }
+  const formatDate = (date) => {
+    return dayjs(date).format('DD MMM, YYYY')
   }
   return (
       <>
@@ -44,7 +48,7 @@ export default function TransactionList({transactions}) {
                   {transaction.amount}
                 </TableCell>
                 <TableCell align='center'>{transaction.description}</TableCell>
-                <TableCell align="center">{transaction.date}</TableCell>
+                <TableCell align="center">{formatDate(transaction.date)}</TableCell>
                 <TableCell align="center">
                 <IconButton aria-label="edit">
                   <EditTwoToneIcon color='primary' />

@@ -7,7 +7,8 @@ import TransactionList from './components/TransactionList.js';
 function App() {
 
 
-  const [transactions, setTransactions] = useState([])
+  const [transactions, setTransactions] = useState([]);
+  const [editTransactions, setEditTransactions] = useState({});
 
   useEffect(() => {
     fetchTransactions()

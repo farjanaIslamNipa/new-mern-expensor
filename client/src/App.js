@@ -8,7 +8,7 @@ function App() {
 
 
   const [transactions, setTransactions] = useState([]);
-  const [editTransactions, setEditTransactions] = useState({});
+  const [editTransaction, setEditTransaction] = useState({});
 
   useEffect(() => {
     fetchTransactions()
@@ -25,8 +25,8 @@ function App() {
     <div>
       <AppBar />
       <Container>
-      <TransactionForm />
-      <TransactionList transactions={transactions} />
+      <TransactionForm editTransaction={editTransaction} />
+      <TransactionList transactions={transactions} setEditTransaction={setEditTransaction} />
       </Container>
     </div>
   );

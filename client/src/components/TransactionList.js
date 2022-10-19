@@ -12,7 +12,7 @@ import IconButton from '@mui/material/IconButton';
 import dayjs from 'dayjs';
 
 
-export default function TransactionList({transactions}) {
+export default function TransactionList({transactions, setEditTransaction}) {
   const remove = async (_id) => {
     if(!window.confirm('Are you sure')) return;
     const res = await fetch(`http://localhost:4000/transaction/${_id}`, {
@@ -51,7 +51,7 @@ export default function TransactionList({transactions}) {
                 <TableCell align="center">{formatDate(transaction.date)}</TableCell>
                 <TableCell align="center">
                 <IconButton aria-label="edit">
-                  <EditTwoToneIcon color='primary' />
+                  <EditTwoToneIcon color='primary' onClick={() => setEditTransaction(transaction)} />
                 </IconButton>
                   <IconButton aria-label="delete" onClick={() => remove(transaction._id)}>
                     <DeleteSweepTwoToneIcon color='secondary' />

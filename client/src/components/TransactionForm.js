@@ -7,7 +7,7 @@ import TextField from '@mui/material/TextField';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
-import {useState} from 'react';
+import {useState, useEffect} from 'react';
 import dayjs from 'dayjs';
 
 const initialForm = {
@@ -16,9 +16,17 @@ const initialForm = {
   date: new Date()
 }
 
-export default function BasicCard() {
+export default function TransactionForm({editTransaction}) {
   const [form, setForm] = useState(initialForm);
   const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
+
+  useEffect(() => {
+    if(editTransaction !== {}){
+      setForm(editTransaction)
+    }
+    console.log(editTransaction)
+  }, [editTransaction])
+  
 
   const handleDate = (newValue) => {
     setForm({...form,date:newValue})
@@ -72,7 +80,13 @@ export default function BasicCard() {
                 renderInput={(params) => <TextField size='small' sx={{ marginRight:4 }} {...params} />}
               />
             </LocalizationProvider>
-            <Button type="submit" variant="contained">Submit</Button>
+            {
+              editTransaction !== {} && <Button type="submit" variant="contained" color="success">Update</Button>
+            }
+            {
+              editTransaction === {} && <Button type="submit" variant="contained">Submit</Button>
+            }
+        
           </Typography>
         </form>
       </CardContent>

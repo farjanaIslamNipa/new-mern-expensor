@@ -9,6 +9,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { DesktopDatePicker } from '@mui/x-date-pickers/DesktopDatePicker';
 import {useState, useEffect} from 'react';
 import dayjs from 'dayjs';
+import { create } from '@mui/material/styles/createTransitions';
 
 const initialForm = {
   amount:0,
@@ -16,12 +17,12 @@ const initialForm = {
   date: new Date()
 }
 
-export default function TransactionForm({editTransaction}) {
+export default function TransactionForm({editTransaction, fetchTransactions}) {
   const [form, setForm] = useState(initialForm);
   const [value, setValue] = useState(dayjs('2014-08-18T21:11:54'));
 
   useEffect(() => {
-    if(editTransaction !== {}){
+    if(editTransaction.amount !== undefined){
       setForm(editTransaction)
     }
     console.log(editTransaction)
@@ -36,16 +37,34 @@ export default function TransactionForm({editTransaction}) {
   }
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    const res = await fetch('http://localhost:4000/transaction', {
+    const res = (editTransaction.amount === undefined) ? create() : update()
+    
+    if(res.ok){
+      setForm(initialForm);
+      fetchTransactions()
+    }
+    // console.log(data, 'response')
+  }
+  const create = async () => {
+   const res = await fetch('http://localhost:4000/transaction', {
       method: 'POST',
       body: JSON.stringify(form),
       headers:{
         'content-type': 'application/json'
       }
     });
-    const data = await res.json();
-    setForm(initialForm);
-    console.log(data, 'response')
+    return res;
+    // const data = await res.json();
+   
+  }
+  const update = async () => {
+    const res = await fetch(`http://localhost:4000/transaction/${editTransaction._id}`, {
+      method: 'PATCH',
+      body: JSON.stringify(form),
+      headers:{
+        'content-type': 'application/json'
+      }
+    });
   }
   return (
     <Card sx={{ minWidth: 275, marginTop:5 }}>
@@ -80,12 +99,17 @@ export default function TransactionForm({editTransaction}) {
                 renderInput={(params) => <TextField size='small' sx={{ marginRight:4 }} {...params} />}
               />
             </LocalizationProvider>
-            {
-              editTransaction !== {} && <Button type="submit" variant="contained" color="success">Update</Button>
-            }
-            {
-              editTransaction === {} && <Button type="submit" variant="contained">Submit</Button>
-            }
+            {editTransaction.amount !== undefined && (
+            <Button type="submit" variant="contained" color="success">
+              Update
+            </Button>
+          )}
+
+          {editTransaction.amount === undefined && (
+            <Button type="submit" variant="contained">
+              Submit
+            </Button>
+          )}
         
           </Typography>
         </form>

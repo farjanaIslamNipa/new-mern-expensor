@@ -24,7 +24,7 @@ export default function TransactionList({transactions, setEditTransaction}) {
     }
   }
   const formatDate = (date) => {
-    return dayjs(date).format('DD MMM, YYYY')
+    return dayjs(date).format('DD MMM YYYY')
   }
   return (
       <>

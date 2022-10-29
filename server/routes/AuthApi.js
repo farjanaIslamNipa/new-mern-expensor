@@ -32,19 +32,25 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
     const {email, password} = req.body;
-    const userExists = await User.findOne({ email });
-    if(!userExists){
+
+    const user = await User.findOne({ email });
+    if(!user){
         res.status(406).json({ message: "Credentials not found" });
         return;
     }
-    const matched = await bcrypt.compare(password, userExists.password);
+    
+    const matched = await bcrypt.compare(password, user.password);
     if(!matched){
         res.status(406).json({ message: "Credentials not found" });
         return;
     }
 
     // create jwt token
-    const token = jwt.sign({}, 'some secret');
+    const payload = {
+        username: email,
+        _id: user._id,
+    }
+    const token = jwt.sign(payload, 'some secret.');
     console.log(token)
     res.json({message: 'Token successfully created', token})
 

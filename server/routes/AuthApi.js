@@ -50,8 +50,7 @@ router.post('/login', async (req, res) => {
         username: email,
         _id: user._id,
     }
-    const token = jwt.sign(payload, 'some secret.');
-    console.log(token)
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
     res.json({message: 'Token successfully created', token})
 
 })

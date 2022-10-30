@@ -37,34 +37,37 @@ export default function TransactionForm({editTransaction, fetchTransactions}) {
   }
   const handleSubmit = async (e) =>{
     e.preventDefault();
-    const res = (editTransaction.amount === undefined) ? create() : update()
-    
-    if(res.ok){
-      setForm(initialForm);
-      fetchTransactions()
-    }
-    // console.log(data, 'response')
+    (editTransaction.amount === undefined) ? create() : update();
   }
+
+  function reload(res) {
+    if (res.ok) {
+      setForm(initialForm);
+      fetchTransactions();
+    }
+  }
+
   const create = async () => {
-   const res = await fetch('http://localhost:4000/transaction', {
+   const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction`, {
       method: 'POST',
       body: JSON.stringify(form),
       headers:{
         'content-type': 'application/json'
       }
     });
-    return res;
+    reload(res);
     // const data = await res.json();
    
   }
   const update = async () => {
-    const res = await fetch(`http://localhost:4000/transaction/${editTransaction._id}`, {
+    const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction/${editTransaction._id}`, {
       method: 'PATCH',
       body: JSON.stringify(form),
       headers:{
         'content-type': 'application/json'
       }
     });
+    reload(res);
   }
   return (
     <Card sx={{ minWidth: 275, marginTop:5 }}>

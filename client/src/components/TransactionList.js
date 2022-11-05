@@ -1,4 +1,5 @@
 import * as React from 'react';
+// import {useState} from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -13,6 +14,8 @@ import dayjs from 'dayjs';
 
 
 export default function TransactionList({transactions, setEditTransaction}) {
+  // const [isLoading, setIsLoading] = useState(false);
+
   const remove = async (_id) => {
     if(!window.confirm('Are you sure')) return;
     const res = await fetch(`${process.env.REACT_APP_API_URL}/transaction/${_id}`, {
